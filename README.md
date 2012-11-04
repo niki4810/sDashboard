@@ -53,7 +53,7 @@ To set up a basic dashboard :
 	<!-- load jquery ui css theme -->
 	<link type="text/css" href="css/jquery-ui.css" rel="stylesheet" />
 	
-	<!-- load the dashboard css -->
+	<!-- load the sDashboard css -->
 	<link href="../sDashboard.css" rel="stylesheet">
 
 	<!-- load jquery library -->
@@ -70,7 +70,7 @@ To set up a basic dashboard :
 	<script src="libs/float/jquery.flot.pie.min.js" type="text/javascript"></script>
 	<script src="libs/float/jquery.flot.selection.js" type="text/javascript"></script>
 
-	<!-- load dashboard library -->
+	<!-- load sDashboard library -->
 	<script src="../jquery-sDashboard.js" type="text/javascript"></script>
 
 ```
