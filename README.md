@@ -273,9 +273,9 @@ $("#myDashboard").bind("sdashboardrowclicked", function(e, data) {
 
 ```
 
-### Chart Plot Click 
+### Chart Plot Selection
 
-To register for a plot click event on a chart widget simply set a listener as follows
+To register for a plot selection event on a chart widget simply set a listener as follows
 
 ```javascript
 
@@ -288,9 +288,9 @@ $("#myDashboard").bind("sdashboardplotselected", function(e, data) {
 });
 ```
 
-### Chart Plot Selection
+### Chart Plot Click 
 
-To register for a plot selection event on a chart widget simply set a listener as follows
+To register for a plot click event on a chart widget simply set a listener as follows
 
 ```javascript
 
