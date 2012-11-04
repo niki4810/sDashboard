@@ -328,7 +328,7 @@ Few portions for sDashboard look and feel have been inspired from the following 
 * portlets : [link](http://jqueryui.com/sortable/#portlets)
 * sortable grid : [link](http://jqueryui.com/sortable/#display-grid)
 
-###Other References : 
+###Other References  
 
 *  DocumentUp library is used to generate the project page for this library, more detail about document up can be found at: [link](http://documentup.com/)
 
