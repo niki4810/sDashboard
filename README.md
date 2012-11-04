@@ -9,6 +9,12 @@ sDashboard is a query plugin that converts an array of objects into a dashboard.
 
 sDashboards has built in support for rendering  datatable's and flot charts.  It also has support to listen for events such as table row click, chart data click and data slection.
 
+
+##Demo
+
+view an example at : [example](http://niki4810.github.com/sDashboard/example/example.html)
+
+
 ##Features
 
 The current version of the dashboard includes the following features
@@ -99,12 +105,6 @@ $("#myDashboard").sDashboard({
 	dashboardData : widgetDefinitions		
 });
 ```
-
-
-##Demo
-
-view an example at : [example](http://niki4810.github.com/sDashboard/example/example.html)
-
 
 ##Options
 
