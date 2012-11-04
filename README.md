@@ -330,7 +330,7 @@ Few portions for sDashboard look and feel have been inspired from the following 
 
 ###Other References : 
 
-*  DocumentUp library is used to generate the project page for this library, project page : [link](http://documentup.com/)
+*  DocumentUp library is used to generate the project page for this library, more detail about document up can be found at: [link](http://documentup.com/)
 
 ##Change Log
 
