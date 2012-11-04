@@ -307,7 +307,7 @@ $("#myDashboard").bind("sdashboardplotclicked", function(e, data) {
 
 ##What's Next
 
-Ofcourse, more features ..  more documentation and much cleaner code :D
+Ofcourse, more features …  more documentation … and much cleaner code …… :D
 
 
 ##Credits
