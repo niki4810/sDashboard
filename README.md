@@ -316,7 +316,7 @@ Special thanks to the following project which are a great source of inspiration 
 
 ###Flex dashboards 
 
-sDashboard is heavily inspired form flex dashboard framework, more details flex dashboard can be found at:  [link](http://www.adobe.com/devnet/flex/samples/dashboard.html)
+sDashboard is heavily inspired from flex dashboard framework, more details flex dashboard can be found at:  [link](http://www.adobe.com/devnet/flex/samples/dashboard.html)
 
 ###Flot Charts
 
