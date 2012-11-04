@@ -305,6 +305,11 @@ $("#myDashboard").bind("sdashboardplotclicked", function(e, data) {
 
 ```
 
+##What's Next
+
+Ofcourse, more features ..  more documentation and much cleaner code :D
+
+
 ##Credits
 
 Special thanks to the following project which are a great source of inspiration for the sDashboard framework.
