@@ -311,15 +311,15 @@ Special thanks to the following project which are a great source of inspiration 
 
 ###Flex dashboards 
 
-sDashboard is heavily inspired form flex dashboard framework, more details can be found at:  [link](http://www.adobe.com/devnet/flex/samples/dashboard.html)
+sDashboard is heavily inspired form flex dashboard framework, more details flex dashboard can be found at:  [link](http://www.adobe.com/devnet/flex/samples/dashboard.html)
 
 ###Flot Charts
 
-sDashboard uses Flot charts to render charts within widgets, more details can be found at [link](https://github.com/flot/flot)
+sDashboard uses Flot charts to render charts within widgets, more details about float charts can be found at [link](https://github.com/flot/flot)
 
 ### Datatables
 
-sDashboard uses datatables library to render table grids, more details can be found at  [link](http://datatables.net/)
+sDashboard uses datatables library to render table grids, more details about datatables can be found at  [link](http://datatables.net/)
 
 ### Jquery  &  JQuery UI
 
