@@ -201,8 +201,8 @@ var tableData = {
 $("#myDashboard").sDashboard("addWidget",{
      widgetId : "id123",
      widgetTitle: "Widget Title",
-     widgetType : "line",
-	widgetContent : lineData 
+     widgetType : "table",
+	widgetContent : tableData 
 });
 
 ```
