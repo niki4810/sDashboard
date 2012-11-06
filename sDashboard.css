@@ -1,0 +1,143 @@
+/*
+ * jquery sDashboard (1.0)
+ * Copyright 2012, Nikhilesh Katakam
+ * Distributed under MIT license.
+ * https://github.com/niki4810/sDashboard
+ */
+
+/*dashboard css*/
+.sDashboard {
+	list-style-type: none;
+	margin: 0;
+	padding-left: 10px;
+	padding-top: 10px;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.sDashboard li {
+	margin: 3px 3px 3px 0;
+	padding: 1px;
+	float: left;
+	width: 400px;
+	height: auto;
+}
+
+/*dashboard widget css*/
+.sDashboardWidget {
+	margin: 0 1em 1em 0;
+}
+
+/*dashboard widget header css*/
+.sDashboardWidgetHeader {
+	margin: 0.3em;
+	padding-bottom: 5px;
+	padding-left: 1em;
+	padding-right: 0.2em;
+	padding-top: 2px;
+	cursor: move;
+}
+
+.sDashboardWidgetHeader .ui-icon {
+	float: right;
+	margin-left: 3px;
+	cursor: default;
+}
+
+/*dashboard widget content css*/
+.sDashboardWidgetContent {
+	margin: 0.3em;
+	padding: 0.4em;
+	height: 180px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.sDashboardWidgetContentMaximized {
+	margin: 0.3em;
+	padding: 0.4em;
+	height: 550px;
+	overflow: auto;
+}
+
+.sDashboardWidgetContainerMaximized {
+	z-index: 1;
+	margin: 0.3em;
+	padding: 0.4em;
+	width: 800px;
+	height: 560px;
+	position: fixed;
+	top: 0px;
+	left: 20%;
+}
+
+.sDashboardWidgetContent tr:hover {
+	background-color: #FCEFA1;
+	cursor: pointer;
+}
+
+/*dashboard table widget css*/
+.sDashboardTableView {
+	width: 100%;
+	height: 95%;
+	overflow: auto;
+}
+
+/*dashboard chart view css*/
+.sDashboardChart {
+	width: 200px;
+	height: 180px;
+	cursor : pointer;
+}
+/*pie chart */
+.sDashboardPieChartMinimized {
+	width: 200px;
+	height: 180px;
+	margin-left: 20%;
+}
+
+.sDashboardPieChartMaximized {
+	width: 640px;
+	height: 480px;
+	margin-left: 10%;
+}
+/*bar chart*/
+.sDashboardBarChartMinimized {
+	width: 100%;
+	height: 100%;
+}
+
+.sDashboardBarChartMaximized {
+	width: 640px;
+	height: 480px;
+}
+
+/*line chart*/
+.sDashboardLineChartMinimized {
+	width: 100%;
+	height: 100%;
+	cursor : crosshair;
+}
+
+.sDashboardLineChartMaximized {
+	width: 640px;
+	height: 480px;
+	cursor : crosshair;
+}
+
+
+/*jquery sortable placeholder styles */
+.ui-sortable-placeholder {
+	border: 1px dotted black;
+	visibility: visible !important;
+	height: 50px !important;
+}
+.ui-sortable-placeholder * {
+	visibility: hidden;
+}
+
+li.ui-sortable-placeholder {
+	background-color: #FCEFA1;
+}
+
