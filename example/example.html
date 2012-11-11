@@ -15,6 +15,8 @@
 		<!-- load jquery ui library -->
 		<script src="libs/jquery/jquery-ui.js" type="text/javascript"> </script>
 
+		<!-- load touch punch library to enable dragging on touch based devices -->
+		<script src="libs/touchpunch/jquery.ui.touch-punch.js" type="text/javascript"> </script>
 		<!-- load gitter notification library -->
 		<script src="libs/gitter/jquery.gritter.js" type="text/javascript"> </script>
 
@@ -26,7 +28,7 @@
 		<script language="javascript" type="text/javascript" src="libs/flotr2/flotr2.ie.min.js"></script>
 		<![endif]-->
 		<script src="libs/flotr2/flotr2.js" type="text/javascript"> </script>
- 
+
 		<!-- load dashboard library -->
 		<script src="../jquery-sDashboard.js" type="text/javascript"> </script>
 
@@ -115,7 +117,7 @@
 				//table row clicked event example
 				$("#myDashboard").bind("sdashboardrowclicked", function(e, data) {
 					$.gritter.add({
-						position: 'bottom-left',
+						position : 'bottom-left',
 						title : 'Table row clicked',
 						time : 1000,
 						text : 'A table row within a table widget has been clicked, please check the console for additional event data'
@@ -129,7 +131,7 @@
 				//plot selected event example
 				$("#myDashboard").bind("sdashboardplotselected", function(e, data) {
 					$.gritter.add({
-						position: 'bottom-left',
+						position : 'bottom-left',
 						title : 'Plot selected',
 						time : 1000,
 						text : 'A plot has been selected within a chart widget, please check the console for additional event data'
@@ -141,7 +143,7 @@
 				//plot click event example
 				$("#myDashboard").bind("sdashboardplotclicked", function(e, data) {
 					$.gritter.add({
-						position: 'bottom-left',
+						position : 'bottom-left',
 						title : 'Plot Clicked',
 						time : 1000,
 						text : 'A plot has been clicked within a chart widget, please check the console for additional event data'
@@ -154,7 +156,7 @@
 				//widget order changes event example
 				$("#myDashboard").bind("sdashboardorderchanged", function(e, data) {
 					$.gritter.add({
-						position: 'bottom-left',
+						position : 'bottom-left',
 						title : 'Order Changed',
 						time : 4000,
 						text : 'The widgets order has been changed,check the console for the sorted widget definitions array'
@@ -165,7 +167,7 @@
 						console.log(data.sortedDefinitions);
 						console.log("+++++++++++++++++++++++++");
 					}
-					
+
 				});
 				//example for adding a text widget
 				$("#btnAddWidget").click(function() {
@@ -262,14 +264,14 @@
 			6) Add Line Chart widget
 		</button>
 
-		<div id="switcher" style="float:right;"> </div>
-		
+		<div id="switcher" style="float:right;"></div>
+
 		<hr/>
 		<ul id="myDashboard">
 
 		</ul>
 
-		<div id="myTweets"> </div>
+		<div id="myTweets"></div>
 
 	</body>
 </html>
