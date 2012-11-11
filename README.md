@@ -330,7 +330,7 @@ Few portions for sDashboard look and feel have been inspired from the following 
 
 ##Change Log
 
-* Current version V1.0
+* Current version V2.0
 
 ##Licence
 
