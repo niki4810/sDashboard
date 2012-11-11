@@ -5,9 +5,9 @@ A simple &amp; light weight dashboard framework in javascript
 
 ##Description
 
-sDashboard is a query plugin that converts an array of objects into a dashboard. Each object in the array would be rendered as a dashboard widget that can be rearranged by dragging around.
+sDashboard is a jQuery plugin that converts an array of objects into a dashboard. Each object in the array would be rendered as a dashboard widget that can be rearranged by dragging around.
 
-sDashboards has built in support for rendering  datatable's and flot charts.  It also has support to listen for events such as table row click, chart data click and data slection.
+sDashboards has built in support for rendering  datatable's and flotr2 charts.  It also has support to listen for events such as table row click, chart data click and data selection built-in.
 
 
 ##Demo
@@ -19,11 +19,23 @@ view an example at : [example](http://niki4810.github.com/sDashboard/example/exa
 
 The current version of the dashboard includes the following features
 
+Current version : V2.0 (aka Salt&Pepper)
+
+* Full support for all Flort2 charts.
+* Support for chart click and selection
+* Support to listen for widget rearrangement and get the re-arranged widget definitions array
+* Improvements to maximize feature on widgets, Widgets can now maximize to full screen
+* Source code for the library reduce by 15% in compared to previous code ( I know this is a show off :D)
+* Re- architectured the way we render charts to support more type of charts instead of sticking to bar, pie and line.
+* Added example to render an already existing dom element as a dashboard widget (see the twitter widget on the demo page)
+
+Previous version : V1.0
+
 * Drag and rearrange widgets
 * Maximizing & Minimizing a widget
 * Close Widgets
 * Rendering data table with in widget
-* Rendering Bar/Pie/Donut/Line charts
+* Rendering Bar/Pie/Donut/Line charts (deprecated)
 * Ability to click through table rows
 * Ability to click on chart data
 * Ability to select chart data
@@ -40,7 +52,7 @@ sDashboard depends on the following libraries
 * Jquery 
 * Jquery UI
 * Datatables (required for table widgets)
-* Flot charts (required for charting widgets)
+* Flotr2 charts (required for charting widgets)
 
 
 ## How to set up
@@ -66,9 +78,7 @@ To set up a basic dashboard :
 	<script src="libs/datatables/jquery.dataTables.js"></script>
 
 	<!-- load flot charting library -->
-	<script src="libs/float/jquery.flot.min.js" type="text/javascript"></script>
-	<script src="libs/float/jquery.flot.pie.min.js" type="text/javascript"></script>
-	<script src="libs/float/jquery.flot.selection.js" type="text/javascript"></script>
+	<script src="libs/float/jquery.flotr2.min.js" type="text/javascript"></script>
 
 	<!-- load sDashboard library -->
 	<script src="../jquery-sDashboard.js" type="text/javascript"></script>
@@ -119,71 +129,36 @@ Title of the dashboard widget
 A unique id for the dashboard widget
 ###widgetType 
 
-Type of widget, possible values are : `table` , `bar` , `pie` , `line`
+Type of widget, possible values are : `table` , `chart` . When set to table, the widget renders as a data table with default row click event built-in. If its a chart, the widget gets rendered as a flotr2 chart. The chart type depends on the options you pass to the widgetContent.
 
-###isADonut 
+###getDataBySelection 
 
- Used when the widgetType is `pie` ,  possible values are `true` or `false`. Default value is `false. When set to true, renders a pie chart as a donut chart.
+Default value is false, when set to true, registers a chart selection event instead of chart click on the flotr2 charts. Generally turn on this setting, if you are using a line chart, for ease of selecting chart data.
 
 ###widgetContent 
 
-* When using a basic widget, it can represent an string
+* When using a basic widget, it can represent an string or any html dom element. For example, if a dom element already exists on the page, and you want to render it as a dashboard widget, simply get a hook to the dom element using $("#id") (or any jQuery selector) and pass it to the widgetDefinition by setting it on the widgetContent.
 
-* if widgetType is set to `pie` or `donut` , it expected to set as : 
+* if widgetType is set to `chart`, the `widgetContent` is set as an object with two keys, `data` and `options`, a sample setup looks like
 
 ```javascript
+var chartData; //flort2 data
+var charOptions; //flotr2 options
+
 $("#myDashboard").sDashboard("addWidget",{
      widgetId : "id123",
      widgetTitle: "Widget Title",
-     widgetType : "pie",
+     widgetType : "chart",
 	//isADonut : True //uncomment if the chart is a donut chart
-	widgetContent : [
-				{
-					label : "series label1" // label for the series
-					data : 10 //some random number or data
-				},
-				{
-					label : "series label2" // label for the series
-					data : 20 //some random number or data
-				},
-]
+	widgetContent : {
+	data : chartData,
+	options : chartOptions	
+}
 });
 
 ```
 
-* if widgetType is set to `bar` , it expected to set as : 
-
-```javascript
-var data = [[0,2],[2,4],[4,6],[6,8]];
-$("#myDashboard").sDashboard("addWidget", {
-     widgetId : "id123",
-     widgetTitle: "Widget Title",
-     widgetType : "bar",
-	widgetContent : data 
-});
-
-```
-
-
-* if widgetType is set to `line` , it expected to set as : 
-
-```javascript
-var lineData = {
-	data : [[0,2],[2,4],[4,6],[6,8]]
-};
-
-$("#myDashboard").sDashboard("addWidget", {
-     widgetId : "id123",
-     widgetTitle: "Widget Title",
-     widgetType : "line",
-	widgetContent : lineData 
-});
-
-```
-
-NOTE: please refer to flot chart documentation for more details on how to pass data to bar,pie,donut and line charts
-
-
+NOTE: `chartData` and `chartOptions` should be constructed based on flotr2 documentation, please see the flotr2 documentation for more details on settings can be found on flotr2 documentation page. You can also refer to the demo example of sDashboard.
 
 * if widgetType is set to `table` , it expected to set as : 
 
@@ -305,10 +280,26 @@ $("#myDashboard").bind("sdashboardplotclicked", function(e, data) {
 
 ```
 
+###Widgets rearranged
+When widgets are rearranged by dragging around, the sDashboard dispatches a `sdashboardorderchanged` event. The event carries an array of sortedDefinitions which are stored with a key `sortedDefinitions` 
+
+```javascript
+$("#myDashboard").bind("sdashboardorderchanged", function(e, data) {
+	console.log(data.sortedDefinitions);
+});
+```
+
 ##What's Next
 
-Ofcourse, more features …  more documentation … and much cleaner code …… :D
+* I am working on implementing features for refreshing individual widgets data and enabling multiple views within a widget, for ex a widget an display a table, bar and pie chart with in it.
+* More documentation and bug fixes :D
 
+##Fun Facts
+* As you have notices V2.0 is a named release called Salt&Pepper. Just like salt and pepper add great flavor to the food, this release adds a great flavor and taste to the sDashboard framework :D .In all seriousness, I just felt its easy to remember the version with a name rather than a version number.
+
+##Architectural Changes
+
+One of the major change I've made is to replace slot charts with flotr2 library, I ve been researching many charting libraries and I strongly feel that flotr2 is the best charting library in terms of the features and ease of use it provides. Hence went forward with this library. 
 
 ##Credits
 
@@ -318,9 +309,9 @@ Special thanks to the following project which are a great source of inspiration 
 
 sDashboard is heavily inspired from flex dashboard framework, more details flex dashboard can be found at:  [link](http://www.adobe.com/devnet/flex/samples/dashboard.html)
 
-###Flot Charts
+###Flotr2 Charts
 
-sDashboard uses Flot charts to render charts within widgets, more details about float charts can be found at [link](https://github.com/flot/flot)
+sDashboard uses Flotr2 charts to render charts within widgets, more details about flotr2 charts can be found at [link](http://www.humblesoftware.com/flotr2/)
 
 ### Datatables
 
