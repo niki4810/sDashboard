@@ -1,5 +1,5 @@
 /*
- * jquery sDashboard (1.0)
+ * jquery sDashboard (2.0)
  * Copyright 2012, Nikhilesh Katakam
  * Distributed under MIT license.
  * https://github.com/niki4810/sDashboard
@@ -62,14 +62,14 @@
 }
 
 .sDashboardWidgetContainerMaximized {
-	z-index: 1;
+	z-index: 9999;
 	margin: 0.3em;
 	padding: 0.4em;
-	width: 800px;
-	height: 560px;
-	position: fixed;
+	width : 98%;
+	height : 100%;
+	left : 0px;
 	top: 0px;
-	left: 20%;
+	position: fixed;
 }
 
 .sDashboardWidgetContent tr:hover {
@@ -86,44 +86,20 @@
 
 /*dashboard chart view css*/
 .sDashboardChart {
-	width: 200px;
-	height: 180px;
-	cursor : pointer;
-}
-/*pie chart */
-.sDashboardPieChartMinimized {
-	width: 200px;
-	height: 180px;
-	margin-left: 20%;
-}
-
-.sDashboardPieChartMaximized {
-	width: 640px;
-	height: 480px;
-	margin-left: 10%;
-}
-/*bar chart*/
-.sDashboardBarChartMinimized {
+	/*	width: 200px;
+	 height: 180px;*/
 	width: 100%;
-	height: 100%;
+	height: 95%;
+/*	cursor: pointer;*/
 }
 
-.sDashboardBarChartMaximized {
-	width: 640px;
-	height: 480px;
+.sDashboardChartClickable{
+	cursor: pointer;
 }
-
-/*line chart*/
-.sDashboardLineChartMinimized {
+.sDashboardChartSelectable{
 	width: 100%;
-	height: 100%;
-	cursor : crosshair;
-}
-
-.sDashboardLineChartMaximized {
-	width: 640px;
-	height: 480px;
-	cursor : crosshair;
+	height: 95%;
+	cursor: crosshair;
 }
 
 
