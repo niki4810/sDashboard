@@ -115,6 +115,7 @@
 				//table row clicked event example
 				$("#myDashboard").bind("sdashboardrowclicked", function(e, data) {
 					$.gritter.add({
+						position: 'bottom-left',
 						title : 'Table row clicked',
 						time : 1000,
 						text : 'A table row within a table widget has been clicked, please check the console for additional event data'
@@ -128,6 +129,7 @@
 				//plot selected event example
 				$("#myDashboard").bind("sdashboardplotselected", function(e, data) {
 					$.gritter.add({
+						position: 'bottom-left',
 						title : 'Plot selected',
 						time : 1000,
 						text : 'A plot has been selected within a chart widget, please check the console for additional event data'
@@ -139,6 +141,7 @@
 				//plot click event example
 				$("#myDashboard").bind("sdashboardplotclicked", function(e, data) {
 					$.gritter.add({
+						position: 'bottom-left',
 						title : 'Plot Clicked',
 						time : 1000,
 						text : 'A plot has been clicked within a chart widget, please check the console for additional event data'
@@ -151,6 +154,7 @@
 				//widget order changes event example
 				$("#myDashboard").bind("sdashboardorderchanged", function(e, data) {
 					$.gritter.add({
+						position: 'bottom-left',
 						title : 'Order Changed',
 						time : 4000,
 						text : 'The widgets order has been changed,check the console for the sorted widget definitions array'
