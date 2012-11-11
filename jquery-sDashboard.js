@@ -1,12 +1,12 @@
 /*
- * jquery sDashboard (1.0)
+ * jquery sDashboard (2.0)
  * Copyright 2012, Nikhilesh Katakam
  * Distributed under MIT license.
  * https://github.com/niki4810/sDashboard
  */
 
 $.widget("nk.sDashboard", {
-	version : "1.0",
+	version : "2.0",
 	options : {
 		dashboardData : []
 	},
@@ -24,70 +24,84 @@ $.widget("nk.sDashboard", {
 
 	_createView : function() {
 		var _dashboardData = this.options.dashboardData;
-
-		for (var i = 0; i < _dashboardData.length; i++) {
+		var i;
+		for ( i = 0; i < _dashboardData.length; i++) {
 			var widget = this._constructWidget(_dashboardData[i]);
 			//append the widget to the dashboard
 			this.element.append(widget);
 			this._renderChart(_dashboardData[i]);
 		}
 
+		var that = this;
 		//call the jquery ui sortable on the columns
 		this.element.sortable({
-			handle : ".sDashboardWidgetHeader"
+			handle : ".sDashboardWidgetHeader",
+			update : function(event, ui) {
+				var sortOrderArray = $(this).sortable('toArray');
+				var sortedDefinitions = [];
+				for ( i = 0; i < sortOrderArray.length; i++) {
+					var widgetContent = that._getWidgetContentForId(sortOrderArray[i], that);
+					sortedDefinitions.push(widgetContent);
+				}
+
+				if (sortedDefinitions.length > 0) {
+					var evtData = {
+						sortedDefinitions : sortedDefinitions
+					}
+					that._trigger("orderchanged",null,evtData);
+				}
+
+			}
 		});
 		this.element.disableSelection();
 
 		//bind events for widgets
 		this._bindEvents();
 	},
-
-	_maximizeCharts : function(widgetContainer) {
-		//toggle pie charts
-		widgetContainer.find(".sDashboardChart.sDashboardPieChartMinimized").hide();
-		widgetContainer.find(".sDashboardChart.sDashboardPieChartMaximized").show();
-
-		//toggle bar charts
-		widgetContainer.find(".sDashboardChart.sDashboardBarChartMinimized").hide();
-		widgetContainer.find(".sDashboardChart.sDashboardBarChartMaximized").show();
-
-		//toggle line charts
-		widgetContainer.find(".sDashboardChart.sDashboardLineChartMinimized").hide();
-		widgetContainer.find(".sDashboardChart.sDashboardLineChartMaximized").show();
-
-	},
-	_minimizeCharts : function(widgetContainer) {
-		//toggle pie charts
-		widgetContainer.find(".sDashboardChart.sDashboardPieChartMinimized").show();
-		widgetContainer.find(".sDashboardChart.sDashboardPieChartMaximized").hide();
-		//toggle bar charts
-		widgetContainer.find(".sDashboardChart.sDashboardBarChartMinimized").show();
-		widgetContainer.find(".sDashboardChart.sDashboardBarChartMaximized").hide();
-		//toggle line charts
-		widgetContainer.find(".sDashboardChart.sDashboardLineChartMinimized").show();
-		widgetContainer.find(".sDashboardChart.sDashboardLineChartMaximized").hide();
+	_getWidgetContentForId : function(id, context) {
+		var widgetData = context.getDashboarData();
+		for (var i = 0; i < widgetData.length; i++) {
+			var widgetObject = widgetData[i];
+			if (widgetObject.widgetId === id) {
+				return widgetObject;
+			}
+		}
+		return [];
 	},
 	_bindEvents : function() {
 		var self = this;
 		//click event for maximize button
 		this.element.find(".sDashboardWidgetHeader span.ui-icon.ui-icon-circle-plus").live("click", function(e) {
-			var widgetContainer = $(e.currentTarget).parents(".sDashboardWidget:first");
-			var widgetContent = widgetContainer.find(".sDashboardWidgetContent");
 
+			//toggle the maximize icon into minimize icon
+			$(e.currentTarget).toggleClass("ui-icon-circle-minus");
+			//change the tooltip on the maximize/minimize icon buttons
 			if ($(e.currentTarget).attr("title") === "Maximize") {
-				self._maximizeCharts(widgetContainer);
 				$(e.currentTarget).attr("title", "Minimize");
 			} else {
-				self._minimizeCharts(widgetContainer);
 				$(e.currentTarget).attr("title", "Maximize");
 			}
-			$(e.currentTarget).toggleClass("ui-icon-circle-minus");
+			//get the widget List Item Dom
+			var widgetListItem = $(e.currentTarget).parents("li:first");
+			//get the widget Container
+			var widget = $(e.currentTarget).parents(".sDashboardWidget:first");
+			//get the widget Content
+			var widgetContainer = widget.find(".sDashboardWidgetContent");
 
-			var docHeight = $(document).height();
-			var docWidth = $(document).width();
+			//toggle the class for widget and inner container
+			widget.toggleClass("sDashboardWidgetContainerMaximized");
+			widgetContainer.toggleClass("sDashboardWidgetContentMaximized ");
 
-			widgetContainer.toggleClass("sDashboardWidgetContainerMaximized");
-			widgetContent.toggleClass("sDashboardWidgetContentMaximized ");
+			var widgetDefinition = self._getWidgetContentForId(widgetListItem.attr("id"), self);
+			if (widgetDefinition.widgetType === "chart") {
+				var chartArea = widgetContainer.find(" div.sDashboardChart")
+				Flotr.draw(chartArea[0], widgetDefinition.widgetContent.data, widgetDefinition.widgetContent.options);
+				if (!widgetDefinition.getDataBySelection) {
+					//when redrawing the widget, the click event listner is getting destroyed, we need to re-register it here again
+					//need to find out if its a bug on flotr2 library.
+					self._bindChartEvents(chartArea[0], widgetListItem.attr("id"), widgetDefinition, self);
+				}
+			}
 		});
 
 		//delete widget by clicking the 'x' icon on the widget
@@ -114,33 +128,10 @@ $.widget("nk.sDashboard", {
 					selectedRowData : selectedRowData,
 					selectedWidgetId : selectedWidgetId
 				}
+
 				//trigger dashboardTableViewRowClick changed event
 				self._trigger("rowclicked", null, evtData);
 			}
-		});
-
-		//chart click
-		this.element.find("div.sDashboardChart").live("plotclick", function(event, pos, obj) {
-			var widget = $(event.currentTarget).parents("li:first");
-			var selectedWidgetId = widget.attr("id");
-			var evtObj = {
-				selectedWidgetId : selectedWidgetId,
-				chartData : obj
-			}
-			if (obj) {
-				self._trigger("plotclicked", null, evtObj);
-			}
-		});
-
-		//chart selection
-		this.element.find("div.sDashboardChart").live("plotselected", function(event, ranges) {
-			var widget = $(event.currentTarget).parents("li:first");
-			var selectedWidgetId = widget.attr("id");
-			var evtObj = {
-				selectedWidgetId : selectedWidgetId,
-				chartData : ranges
-			};
-			self._trigger("plotselected", null, evtObj);
 		});
 	},
 
@@ -173,23 +164,14 @@ $.widget("nk.sDashboard", {
 			}
 			var dataTable = $('<table cellpadding="0" cellspacing="0" border="0" class="display sDashboardTableView"></table>').dataTable(tableDef);
 			widgetContent.append(dataTable);
-		} else if (widgetDefinition.widgetType === 'pie') {
-			var pieChart = $('<div/>').addClass("sDashboardChart sDashboardPieChartMinimized");
-			var pieChartMaximized = $("<div/>").addClass("sDashboardChart sDashboardPieChartMaximized");
-			widgetContent.append(pieChart);
-			widgetContent.append(pieChartMaximized);
-			//$.plot(pieChart, data, options);
-
-		} else if (widgetDefinition.widgetType === 'bar') {
-			var barChart = $('<div/>').addClass("sDashboardChart sDashboardBarChartMinimized");
-			var barChartMaximized = $("<div/>").addClass("sDashboardChart sDashboardBarChartMaximized");
-			widgetContent.append(barChart);
-			widgetContent.append(barChartMaximized);
-		} else if (widgetDefinition.widgetType === 'line') {
-			var lineChart = $('<div/>').addClass("sDashboardChart sDashboardLineChartMinimized");
-			var lineChartMaximized = $("<div/>").addClass("sDashboardChart sDashboardLineChartMaximized");
-			widgetContent.append(lineChart);
-			widgetContent.append(lineChartMaximized);
+		} else if (widgetDefinition.widgetType === 'chart') {
+			var chart = $('<div/>').addClass("sDashboardChart");
+			if (widgetDefinition.getDataBySelection) {
+				chart.addClass("sDashboardChartSelectable");
+			} else {
+				chart.addClass("sDashboardChartClickable");
+			}
+			widgetContent.append(chart);
 		} else {
 			widgetContent.append(widgetDefinition.widgetContent);
 		}
@@ -208,104 +190,60 @@ $.widget("nk.sDashboard", {
 
 	_renderChart : function(widgetDefinition) {
 		var id = "li#" + widgetDefinition.widgetId;
-		var chartArea, chartAreaMaximized, data, options;
-		if (widgetDefinition.widgetType === 'pie') {
+		var chartArea;
+		var data
+		var options;
 
-			chartArea = this.element.find(id + " div.sDashboardChart.sDashboardPieChartMinimized");
-			chartAreaMaximized = this.element.find(id + " div.sDashboardChart.sDashboardPieChartMaximized");
-			data = widgetDefinition.widgetContent;
-			//if its a pie chart
-			if (widgetDefinition.isADonut) {
-				options = {
-					series : {
-						pie : {
-							show : true,
-							innerRadius : 0.5
-						}
-					},
-					grid : {
-						hoverable : true,
-						clickable : true
-					},
-					legend : {
-						show : false
-					}
-				}
+		if (widgetDefinition.widgetType === 'chart') {
+			chartArea = this.element.find(id + " div.sDashboardChart");
+			data = widgetDefinition.widgetContent.data;
+			options = widgetDefinition.widgetContent.options;
+			Flotr.draw(chartArea[0], data, options);
+			if (widgetDefinition.getDataBySelection) {
+				this._bindSelectEvent(chartArea[0], widgetDefinition.widgetId, widgetDefinition, this);
 			} else {
-				//if its a donut chart
-				options = {
-					series : {
-						pie : {
-							show : true
-						}
-					},
-					grid : {
-						hoverable : true,
-						clickable : true
-					},
-					legend : {
-						show : false
-					}
-				};
+				this._bindChartEvents(chartArea[0], widgetDefinition.widgetId, widgetDefinition, this);
 			}
-			$.plot(chartArea, data, options);
-			$.plot(chartAreaMaximized, data, options);
-			chartAreaMaximized.hide();
-		}
-		if (widgetDefinition.widgetType === 'bar') {
-			chartArea = this.element.find(id + " div.sDashboardChart.sDashboardBarChartMinimized");
-			chartAreaMaximized = this.element.find(id + " div.sDashboardChart.sDashboardBarChartMaximized");
-			data = widgetDefinition.widgetContent;
-			var chartObj = [{
-				data : data,
-				bars : {
-					show : true
-				}
-			}];
-			var options = {
-				grid : {
-					hoverable : true,
-					clickable : true
-				},
-				legend : {
-					show : true
-				}
-			}
-			$.plot(chartArea, chartObj, options);
-			$.plot(chartAreaMaximized, chartObj, options);
-			chartAreaMaximized.hide();
 		}
 
-		if (widgetDefinition.widgetType === 'line') {
-			chartArea = this.element.find(id + " div.sDashboardChart.sDashboardLineChartMinimized");
-			chartAreaMaximized = this.element.find(id + " div.sDashboardChart.sDashboardLineChartMaximized");
-			data = widgetDefinition.widgetContent;
-			options = {
-				series : {
-					lines : {
-						show : true
-					},
-					points : {
-						show : true
-					}
-				},
-				legend : {
-					noColumns : 2
-				},
-				xaxis : {
-					tickDecimals : 0
-				},
-				yaxis : {
-					min : 0
-				},
-				selection : {
-					mode : "x"
-				}
+	},
+	_bindSelectEvent : function(chartArea, widgetId, widgetDefinition, context) {
+		Flotr.EventAdapter.observe(chartArea, "flotr:select", function(area) {
+			var evtObj = {
+				selectedWidgetId : widgetId,
+				chartData : area
 			};
-			$.plot(chartArea, data, options);
-			$.plot(chartAreaMaximized, data, options);
-			chartAreaMaximized.hide();
-		}
+			context._trigger("plotselected", null, evtObj);
+		});
+	},
+	_bindChartEvents : function(chartArea, widgetId, widgetDefinition, context) {
+
+		Flotr.EventAdapter.observe(chartArea, 'flotr:click', function(d) {
+			//only if a series is clicked dispatch a click event
+			if (d.index != undefined && d.seriesIndex != undefined) {
+				var evtObj = {};
+				evtObj.selectedWidgetId = widgetId;
+				evtObj.flotr2GeneratedData = d;
+				var widgetData = widgetDefinition.widgetContent.data;
+				var seriesData = widgetData[d.seriesIndex];
+				var selectedData;
+
+				if ($.isArray(seriesData)) {
+					selectedData = seriesData[d.index];
+				} else {
+					selectedData = seriesData;
+				}
+
+				evtObj.customData = {
+					index : d.index,
+					selectedIndex : d.seriesIndex,
+					seriesData : seriesData,
+					selectedData : selectedData
+				}
+				context._trigger("plotclicked", null, evtObj);
+			}
+		});
+
 	},
 	_removeWidgetFromWidgetDefinitions : function(widgetId) {
 		var widgetDefs = this.options.dashboardData;
