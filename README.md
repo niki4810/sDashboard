@@ -1,5 +1,5 @@
 ```
-This repository has been moved to http://modeln.github.com/sDashboard
+This repository has been moved to [http://modeln.github.com/sDashboard](http://modeln.github.com/sDashboard)
 ```
 
 sDashboard
