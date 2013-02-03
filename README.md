@@ -1,3 +1,7 @@
+```
+This repository has been moved to http://modeln.github.com/sDashboard
+```
+
 sDashboard
 ==========
 
